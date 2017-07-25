@@ -3,17 +3,19 @@ import './App.css';
 import Search from './Search';
 import Table from './Table';
 import Button from './Button';
+import PropTypes from 'prop-types';
 
+import {
+    DEFAULT_QUERY,
+    DEFAULT_PAGE,
+    DEFAULT_HPP,
 
-const DEFAULT_QUERY = 'redux';
-const DEFAULT_PAGE = 0;
-const DEFAULT_HPP = '10';
-
-const PATH_BASE = 'http://hn.algolia.com/api/v1';
-const PATH_SEARCH = '/search';
-const PARAM_SEARCH = 'query=';
-const PARAM_PAGE = 'page=';
-const PARAM_HPP = 'hitsPerPage=';
+    PATH_BASE,
+    PATH_SEARCH,
+    PARAM_PAGE,
+    PARAM_SEARCH,
+    PARAM_HPP
+} from "../constants/index"
 
 class App extends Component {
     constructor(props) {
@@ -93,7 +95,7 @@ class App extends Component {
         if(this.needsToSearchTopStories(searchTerm)) {
             this.fetchSearchTopStories(searchTerm, DEFAULT_PAGE);
         }
-        
+
         event.preventDefault();
     }
 
@@ -106,7 +108,6 @@ class App extends Component {
 
     render() {
         const {searchTerm, results, searchKey} = this.state;
-        console.log(results);
         const page = (
             results &&
             results[searchKey] &&
@@ -147,6 +148,11 @@ class App extends Component {
     }
 }
 
+App.PropTypes = {
+    results: PropTypes.array,
+    searchKey: PropTypes.string,
+    searchTerm: PropTypes.string,
+};
 
 export default App;
 
