@@ -1,11 +1,71 @@
 import React from 'react';
-import Button from './Button'
+import Button from './Button';
+import Sort from './Sort';
 import PropTypes from 'prop-types';
 
-const Table = ({list, onDismiss}) => {
+import { sortBy } from 'lodash';
+
+const Table = ({list, sortKey, onSort, onDismiss, isSortReverse}) => {
+    const SORTS = {
+        NONE: list => list,
+        TITLE: list => sortBy(list, 'title'),
+        AUTHOR: list => sortBy(list, 'author'),
+        COMMENTS: list => sortBy(list, 'num_comments').reverse(),
+        POINTS: list => sortBy(list, 'points').reverse(),
+    };
+
+    const sortedList = SORTS[sortKey](list);
+    const reverseSortedList = isSortReverse ? sortedList.reverse() : sortedList;
     return (
         <div className="table">
-            {list.map(item =>
+            <div className="table-header">
+                <span style={{width: '40%'}}>
+                    <Sort
+                        sortKey={'TITLE'}
+                        onSort={onSort}
+                        activeSortKey={sortKey}
+                        isSortReverse={isSortReverse}
+                        >
+                        Title
+                    </Sort>
+                </span>
+                <span style={{width: '30%'}}>
+                    <Sort
+                        sortKey={'AUTHOR'}
+                        onSort={onSort}
+                        activeSortKey={sortKey}
+                        isSortReverse={isSortReverse}
+                    >
+                        Author
+                    </Sort>
+                </span>
+                <span style={{width: '10%'}}>
+                    <Sort
+                        sortKey={'COMMENTS'}
+                        onSort={onSort}
+                        activeSortKey={sortKey}
+                        isSortReverse={isSortReverse}
+                    >
+                        Comments
+                    </Sort>
+                </span>
+                <span style={{width: '10%'}}>
+                    <Sort
+                        sortKey={'POINTS'}
+                        onSort={onSort}
+                        activeSortKey={sortKey}
+                        isSortReverse={isSortReverse}
+                    >
+                        Points
+                    </Sort>
+                </span>
+                <span style={{width: '10%'}}>
+                        Delete
+                </span>
+            </div>
+
+
+            { reverseSortedList.map(item =>
                 <div key={item.objectID} className="table-row">
                     <span style={{width: '40%'}}>
                         <a href={item.url}>{item.title}</a>
